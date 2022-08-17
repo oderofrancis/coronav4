@@ -1,0 +1,484 @@
+{% extends 'base/base.html' %}
+
+{% block title %}latin{% endblock %}
+
+{% block content %}
+
+<hr>
+
+<div class="container-fluid">
+
+	<h3 style="text-align:center"><b>SOUTH AMERICA CORONA ANALYSIS</b></h3>
+
+	<hr>
+
+	<div class="row">
+
+		<!-- confirmed -->
+
+		<div class="col-md-3">
+
+			<hr>
+			
+			<div class="card" style="height:620px;">
+		    	<div class="card-header" style="font-size :20px; text-align:center;">
+		    		<b>CONFIRMED : {{totallatin}} </b>
+		  		</div>
+
+		  		<div class="card-body" style="max-height: 600px;overflow: scroll; overflow-x:hidden;">
+
+			  		<form method="POST" enctype="multipart/form-data" action="country">
+
+				        {% csrf_token %}
+
+				        <!-- names of country -->
+
+				            <div style="float: left;width:50%;">
+
+				               {% for con in latin_con_names %}
+
+				                  <table style="border-width: 6px; border: #333;width:100%;">
+
+				                     <tr>
+
+				                        <input class="btn btn-info" type="submit" value={{con}} name="countrynames" style="float: left;width:150px;margin:5px;">
+
+				                     </tr>
+
+				                  </table>
+
+				               {% endfor %}
+
+				            </div>
+				    </form>
+
+				    <!-- values -->
+
+				    <form method="POST" enctype="multipart/form-data">
+
+			            {% csrf_token %}
+
+			            <!-- names of country -->
+
+			            <div style="float: left;width:50%;">
+
+			               {% for con in latin_con_values %}
+
+			                  <table style=" border: #333;width:100%;">
+
+			                     <tr>
+
+			                        <input class="btn btn-secondary" type="submit" value={{con}} name="countryname" style="float: center;width:140px;margin:5px;">
+
+			                     </tr>
+
+			                  </table>
+
+			               {% endfor %}
+
+			            </div>
+			        </form>
+				</div>
+
+			</div>
+			
+		</div>
+
+
+
+
+
+		<!-- map -->
+
+	{% if showmap == 'True' %}
+
+			<div class="col-md-6">
+
+				<hr>
+				
+				<div class="card card-body" style="height:620px;">
+
+					{% include 'continent/latin_map.html' %}
+
+				</div>
+				
+			</div>
+
+
+			<!-- death -->
+
+			<div class="col-md-3">
+
+				<hr>
+				
+				<div class="card" style="height:620px;">
+			    	<div class="card-header" style="font-size :20px; text-align:center;">
+			    		<b>DEATH : {{totallatin_d}} </b>
+			  		</div>
+
+			  		<div class="card-body" style="max-height: 600px;overflow: scroll; overflow-x:hidden;">
+
+			  			<form method="POST" enctype="multipart/form-data">
+
+				            {% csrf_token %}
+
+				            <!-- names of country -->
+
+				            <div style="float: left;width:50%;">
+
+				               {% for con in latin_death_names %}
+
+				                  <table style="border-width: 6px; border: #333;width:100%;">
+
+				                     <tr>
+
+				                        <input class="btn btn-danger" type="submit" value={{con}} name="countryname" style="float: left;width:150px;margin:3px;">
+
+				                     </tr>
+
+				                  </table>
+
+				               {% endfor %}
+
+				            </div>
+				        </form>
+
+				        <!-- values -->
+
+		    			<form method="POST" enctype="multipart/form-data">
+
+				            {% csrf_token %}
+
+				            <!-- names of values -->
+
+				            <div style="float: left;width:50%;">
+
+				               {% for con in latin_death_values %}
+
+				                  <table style=" border: #333;width:100%;">
+
+				                     <tr>
+
+				                        <input class="btn btn-secondary" type="submit" value={{con}} name="countryname" style="float: center;width:140px;margin:3px;">
+
+				                     </tr>
+
+				                  </table>
+
+				               {% endfor %}
+
+				            </div>
+				        </form>
+					    
+		    		</div>
+
+				</div>
+			
+			</div>
+	</div>
+</div>
+
+<hr>
+
+<div class="container-fluid">
+	<div class="row">
+
+	<!-- bar graph -->
+
+	<!-- new confirmed cases -->
+
+		<div class="col-md-3">
+
+			<hr>
+			
+			<div class="card" style="height:400px;">
+				<div class="card-header" style="font-size :15px; text-align:center;">
+		    		<b>New Confirmed  : {{total_increase}} </b>
+		  		</div>
+
+
+		  		<div class="card-body" style="max-height: 500px;overflow: scroll; overflow-x:hidden;">	
+
+			    <!-- values and the chart -->
+
+			    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+    			<canvas id="confirmed" width="400" height="800"></canvas>
+
+    			<script>
+
+    				var ctx = document.getElementById('confirmed');
+					
+					var myChart = new Chart(ctx, {
+
+						type: 'horizontalBar',
+					    
+					    data: {
+					        labels: {{result_confirmed_names|safe}},
+					        datasets: [{
+					        
+					            data: {{result_confirmed_values|safe}},
+					            backgroundColor: [
+					                'rgba(255, 99, 132, 0.2)',
+					                'rgba(54, 162, 235, 0.2)',
+					                'rgba(255, 206, 86, 0.2)',
+					                'rgba(75, 192, 192, 0.2)',
+					                'rgba(153, 102, 255, 0.2)',
+					                'rgba(255, 159, 64, 0.2)',
+					                'rgba(255, 206, 86, 0.2)',
+					                'rgba(75, 192, 192, 0.2)',
+					                'rgba(153, 102, 255, 0.2)',
+					                'rgba(255, 159, 64, 0.2)',
+					            ],
+					            borderColor: [
+					                'rgba(255, 99, 132, 1)',
+					                'rgba(54, 162, 235, 1)',
+					                'rgba(54, 162, 235, 1)',
+					                'rgba(75, 192, 192, 1)',
+					                'rgba(153, 102, 255, 1)',
+					                'rgba(255, 159, 64, 1)',
+					                'rgba(153, 102, 255, 1)',
+					                'rgba(75, 192, 192, 1)',
+					                'rgba(153, 102, 255, 1)',
+					                'rgba(255, 159, 64, 1)'
+					            ],
+					            borderWidth: 1
+					        }]
+					    },
+					    options: {
+					        scales: {
+					            y: {
+					                beginAtZero: true
+					            }
+					        },
+							legend: {
+						        display: false
+						    },
+						    labels: {
+						        render: 'value'
+						      }
+					    }
+					});
+				</script>
+
+				    
+				    
+	    		</div>
+
+			</div>
+		</div>
+
+		<!-- new world stattistics cases -->
+
+		<div class="col-md-6">
+
+			<hr>
+			
+			<div class="card" style="height:400px;">
+				<div class="card-header" style="font-size :15px; text-align:center;">
+		    		<b>South America Statistics </b>
+		  		</div>
+
+		  		<div class="card-body" style=" max-height: 400px;overflow: scroll; overflow:auto;">	
+
+			  		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+	    			<canvas id="world" width="400" height="350" ></canvas>
+
+	    			<script>
+						var ctx = document.getElementById('world');
+						var myChart = new Chart(ctx, {
+
+							type: 'line',
+						    
+						    data: {
+						        labels: {{data_col_dates|safe}},
+						        datasets: [{
+						        
+						            data: {{data_col|safe}},
+
+						            backgroundColor: [
+						                'rgba(255, 99, 132, 0.2)',
+						            ],
+						            borderColor: [
+						                'rgba(255, 99, 132, 1)',
+						            ],
+						            borderWidth: 1
+						        }]
+						    },
+						    options: {
+						        scales: {
+						            y: {
+						                beginAtZero: true
+						            }
+						        },
+						        legend: {
+							        display: false
+							    },
+							    tooltips: {
+							        callbacks: {
+							           label: function(tooltipItem) {
+							                  return tooltipItem.yLabel;
+							           }
+							        }
+							    }
+								
+						    }
+						});
+					</script>
+				</div>
+				    
+			</div>
+		</div>
+
+		<!-- new death cases -->
+
+		<div class="col-md-3">
+
+			<hr>
+			
+			<div class="card" style="height:400px;">
+				<div class="card-header" style="font-size :15px; text-align:center;">
+		    		<b>New Death  : {{total_increase_d}} </b>
+		  		</div>
+
+		  		<div class="card-body" style="max-height: 500px;overflow: scroll; overflow-x:hidden;">	
+
+			  		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+	    			<canvas id="death" width="400" height="800"></canvas>
+
+	    			<script>
+						var ctx = document.getElementById('death');
+						var myChart = new Chart(ctx, {
+
+							type: 'horizontalBar',
+						    
+						    data: {
+						        labels: {{result_death_names|safe}},
+						        datasets: [{
+						        
+						            data: {{result_death_values|safe}},
+						            backgroundColor: [
+						                'rgba(255, 99, 132, 0.2)',
+						                'rgba(54, 162, 235, 0.2)',
+						                'rgba(255, 206, 86, 0.2)',
+						                'rgba(75, 192, 192, 0.2)',
+						                'rgba(153, 102, 255, 0.2)',
+						                'rgba(255, 159, 64, 0.2)',
+						                'rgba(255, 206, 86, 0.2)',
+						                'rgba(75, 192, 192, 0.2)',
+						                'rgba(153, 102, 255, 0.2)',
+						                'rgba(255, 159, 64, 0.2)',
+						            ],
+						            borderColor: [
+						                'rgba(255, 99, 132, 1)',
+						                'rgba(54, 162, 235, 1)',
+						                'rgba(54, 162, 235, 1)',
+						                'rgba(75, 192, 192, 1)',
+						                'rgba(153, 102, 255, 1)',
+						                'rgba(255, 159, 64, 1)',
+						                'rgba(153, 102, 255, 1)',
+						                'rgba(75, 192, 192, 1)',
+						                'rgba(153, 102, 255, 1)',
+						                'rgba(255, 159, 64, 1)'
+						            ],
+						            borderWidth: 1
+						        }]
+						    },
+						    options: {
+						        scales: {
+						            y: {
+						                beginAtZero: true
+						            }
+						        },
+								legend: {
+							        display: false
+							    },
+							    labels: {
+							        render: 'value'
+							      }
+						    }
+						});
+					</script>
+
+				</div>
+				    
+			</div>
+		</div>
+
+		
+
+	{% elif showmap == 'False' %}
+	
+			<div class="col-md-9">
+
+				<hr>
+				
+
+				<div class="card" style="height:620px;">
+
+					<div class="card-header" style="font-size :20px; text-align:center;">
+
+			    		<b>Analysis for {{countrynames}}</b>
+
+			  		</div>
+
+						<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+					
+					<canvas id="lineChart" style="height: 570px;"></canvas>
+
+					<script>
+					    var data2={{datasetforline|safe}};
+
+					    var chartOptions2 = {
+					            legend: {
+					                display: true
+					                    },
+					                    scales: {
+											yAxes: [{
+												type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+												display: true,
+												position: 'left',
+												id: 'y-axis-1',
+											}, {
+												type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+												display: true,
+												position: 'right',
+												id: 'y-axis-2',
+
+												// grid line settings
+												gridLines: {
+													drawOnChartArea: false, // only want the grid lines for one axis to show up
+												},
+											}],
+										},
+					        };
+
+					    var ctx2 = document.getElementById('lineChart').getContext('2d');
+
+						var myLineChart = new Chart(ctx2, {
+					        type: 'line',
+					        data: {labels:{{axisvalues|safe}},datasets:data2,},
+					        options: chartOptions2
+					        });
+					</script>
+
+				</div>
+				
+			</div>
+
+	{% endif %}
+
+	</div>
+
+		<!-- code for time -->
+
+		<!-- {% include 'continent/time.html' %} -->
+</div>
+
+<hr>
+
+
+{% endblock %}
+	

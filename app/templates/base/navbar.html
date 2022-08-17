@@ -1,0 +1,72 @@
+{% load static %}
+
+<style>
+  .hello-msg{
+    font-size: 15px;
+    color: #fff;
+    margin-right: 20px;
+  }
+</style>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+   <h1 class="navbar-brand mr-auto" style="font-size:30px" ><img src="{% static 'images/covid.png' %}"> <b>CORONA APP</b></h1>
+       
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav mx-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'home' %}">Home</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'world' %}">World</a>
+      </li>
+
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'africa' %}">Africa</a>
+      </li>
+
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'america' %}">North America</a>
+      </li>
+
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'latin' %}">Latin America</a>
+      </li>
+
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'asia' %}">Asia</a>
+      </li>
+
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'europe' %}">Europe</a>
+      </li>
+
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'oceania' %}">Oceania</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+        <span class="nav-link">Hello, {{ user.username|default:'Guest' }}</span>
+      </li>
+      <li class="nav-item active">
+        <span><a class="nav-link" href="#">Login</a></span>
+      </li>
+      <li class="nav-item active">
+        <span><a class="nav-link" href="#">Logout</a></span>
+      </li>
+
+    </ul>
+  </div>
+
+</nav>
+
+<br>
